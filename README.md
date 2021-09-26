@@ -1,24 +1,15 @@
-# README
+# JWT Authentication
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Overview
 
-Things you may want to cover:
+Basic authentication using JWT, with emphasis on best practices.
 
-* Ruby version
+## Setup pre-req
 
-* System dependencies
+* `ruby '2.7.2'`
+* `rails '~> 6.1.4', '>= 6.1.4.1'`
 
-* Configuration
+## Installation
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* `rails db:create db:migrate`
+* `rails s`
