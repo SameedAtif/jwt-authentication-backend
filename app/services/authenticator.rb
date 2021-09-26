@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Authenticator
   class << self
     def encode(payload)
@@ -10,8 +12,8 @@ class Authenticator
 
     private
 
-    JWT_SECURITY_ALGORITHM = 'ED25519'.freeze
-    TOKEN_VALID_DURATION = '3600'.freeze
+    JWT_SECURITY_ALGORITHM = 'ED25519'
+    TOKEN_VALID_DURATION = '3600'
     JWT_PRIVATE_KEY = 'abcdefghijklmnopqrstuvwxyzABCDEF'
 
     private_constant :JWT_SECURITY_ALGORITHM, :TOKEN_VALID_DURATION, :JWT_PRIVATE_KEY
