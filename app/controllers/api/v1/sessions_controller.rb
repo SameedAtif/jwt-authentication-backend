@@ -3,9 +3,11 @@
 module Api
   module V1
     class SessionsController < ApplicationController
+      skip_before_action :authenticate, only: %i[create]
+
       def create
         user = User.find_by_email!(params[:email]).authenticate(params[:password])
-        access_token, refresh_token = Jwt::Encoder.call(user)
+        access_token, refresh_token = Jwt::Issuer.call(user)
         cookies.encrypted[:jwt] = {
           data: { access_token: access_token, refresh_token: refresh_token },
           httponly: true
@@ -15,12 +17,23 @@ module Api
       end
 
       def destroy
-        if current_user
-          cookies.delete(:jwt)
-          render json: { message: 'Logged out successfully' }, status: :ok
-        else
-          render json: { message: 'An error occured' }, status: :bad_request
-        end
+        Jwt::Revoker.revoke(decoded_token: @decoded_token, user: @current_user)
+        cookies.delete(:jwt)
+
+        render json: { message: 'Logged out successfully' }, status: :ok
+      end
+
+      def update
+        access_token, refresh_token = Jwt::Refresher.refresh!(
+          refresh_token: cookies.encrypted[:jwt], decoded_token: @decoded_token, user: @current_user
+        )
+
+        cookies.encrypted[:jwt] = {
+          data: { access_token: access_token, refresh_token: refresh_token },
+          httponly: true
+        }
+
+        render json: { message: 'Token refreshed', body: { user_id: user.id } }, status: :ok
       end
 
       private

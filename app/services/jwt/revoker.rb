@@ -15,7 +15,7 @@ module Jwt
         user: user
       )
     rescue StandardError
-      raise Errors::Jwt::InvalidToken
+      raise InvalidToken
     end
   end
 end

@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  jti: MyString
+  user: one
+  exp: 2021-09-27 23:20:40
+
+two:
+  jti: MyString
+  user: two
+  exp: 2021-09-27 23:20:40

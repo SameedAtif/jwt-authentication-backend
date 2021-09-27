@@ -8,22 +8,22 @@ module Jwt
       token = access_token || Jwt::Authenticator.authenticate_cookie(
         headers
       )
-      raise Errors::Jwt::MissingToken unless token.present?
+      raise MissingToken unless token.present?
 
       decoded_token = Jwt::Decoder.decode!(token)
       user = Jwt::Authenticator.authenticate_user_from_token(decoded_token)
-      raise Errors::Unauthorized unless user.present?
+      raise Unauthorized unless user.present?
 
       [user, decoded_token]
     end
 
     def authenticate_cookie(cookie)
       # cookie&.split('Bearer ')&.last
-      cookie
+      cookie.dig(:data, :access_token)
     end
 
     def authenticate_user_from_token(decoded_token)
-      raise Errors::Jwt::InvalidToken unless decoded_token[:jti].present? && decoded_token[:user_id].present?
+      raise InvalidToken unless decoded_token[:jti].present? && decoded_token[:user_id].present?
 
       user = User.find(decoded_token.fetch(:user_id))
       blacklisted = Jwt::Blacklister.blacklisted?(jti: decoded_token[:jti])
