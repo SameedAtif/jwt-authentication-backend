@@ -5,7 +5,11 @@ module Api
     class SessionsController < ApplicationController
       def create
         user = User.find_by_email!(params[:email]).authenticate(params[:password])
-        cookies.signed[:jwt] = { value: Authenticator.encode(user_payload(user)), httponly: true }
+        access_token, refresh_token = Jwt::Encoder.call(user)
+        cookies.encrypted[:jwt] = {
+          data: { access_token: access_token, refresh_token: refresh_token },
+          httponly: true
+        }
 
         render json: { message: 'Logged in successfully', body: { user_id: user.id } }, status: :ok
       end

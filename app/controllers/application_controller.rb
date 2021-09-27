@@ -4,10 +4,17 @@ class ApplicationController < ActionController::API
   include ActionController::Cookies
   include ExceptionHandler
 
-  protected
+  before_action :authenticate
 
-  def current_user
-    token = Authenticator.decode(cookies.signed[:jwt])[0].symbolize_keys
-    User.find(token.dig(:data, :user_id))
+  private
+
+  def authenticate
+    current_user, decoded_token = Jwt::Authenticator.call(
+      headers: cookies.encrypted[:jwt],
+      access_token: params[:access_token] # authenticate from header OR params
+    )
+
+    @current_user = current_user
+    @decoded_token = decoded_token
   end
 end
