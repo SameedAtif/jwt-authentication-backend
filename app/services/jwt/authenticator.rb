@@ -36,16 +36,5 @@ module Jwt
     def valid_issued_at?(user, decoded_token)
       !user.token_issued_at || decoded_token[:iat] >= user.token_issued_at.to_i
     end
-
-    module Helpers
-      extend ActiveSupport::Concern
-
-      def logout!(user:, decoded_token:)
-        Jwt::Revoker.revoke(
-          decoded_token: decoded_token,
-          user: user
-        )
-      end
-    end
   end
 end
