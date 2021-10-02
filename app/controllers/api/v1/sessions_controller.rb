@@ -8,7 +8,7 @@ module Api
       def create
         user = User.find_by_email!(params[:email]).authenticate(params[:password])
         access_token, refresh_token = Jwt::Issuer.call(user)
-        cookies.encrypted[:jwt] = {
+        cookies.encrypted['jwt'] = {
           data: { access_token: access_token, refresh_token: refresh_token },
           httponly: true
         }
@@ -25,10 +25,10 @@ module Api
 
       def update
         access_token, refresh_token = Jwt::Refresher.refresh!(
-          refresh_token: cookies.encrypted[:jwt], decoded_token: @decoded_token, user: @current_user
+          refresh_token: cookies.encrypted['jwt'], decoded_token: @decoded_token, user: @current_user
         )
 
-        cookies.encrypted[:jwt] = {
+        cookies.encrypted['jwt'] = {
           data: { access_token: access_token, refresh_token: refresh_token },
           httponly: true
         }
