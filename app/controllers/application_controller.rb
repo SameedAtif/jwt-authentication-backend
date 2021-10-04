@@ -10,7 +10,7 @@ class ApplicationController < ActionController::API
 
   def authenticate
     current_user, decoded_token = Jwt::Authenticator.call(
-      headers: cookies.encrypted['jwt'],
+      headers: cookies.encrypted[:jwt],
       access_token: params[:access_token] # authenticate from header OR params
     )
 
