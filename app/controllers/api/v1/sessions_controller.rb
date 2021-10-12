@@ -8,12 +8,14 @@ module Api
       def create
         user = User.find_by_email!(params[:email]).authenticate(params[:password])
         access_token, refresh_token = Jwt::Issuer.call(user)
-        cookies.encrypted[:jwt] = {
-          data: { access_token: access_token, refresh_token: refresh_token },
-          httponly: true,
-          secure: true
-        }
 
+        response.set_cookie('jwt',
+          {
+            value: { access_token: access_token, refresh_token: refresh_token },
+            httponly: true,
+            secure: true
+          }
+        )
         render json: { message: 'Logged in successfully', body: { user_id: user.id } }, status: :ok
       end
 

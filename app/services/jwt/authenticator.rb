@@ -17,9 +17,9 @@ module Jwt
       [user, decoded_token]
     end
 
-    def authenticate_cookie(cookie)
+    def authenticate_cookie(cookies)
       # cookie&.split('Bearer ')&.last
-      cookie.dig(:data, :access_token)
+      cookies.dig(:data, :access_token)
     end
 
     def authenticate_user_from_token(decoded_token)
