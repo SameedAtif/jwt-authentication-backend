@@ -9,13 +9,12 @@ module Api
         user = User.find_by_email!(params[:email]).authenticate(params[:password])
         access_token, refresh_token = Jwt::Issuer.call(user)
 
-        response.set_cookie('jwt',
-          {
-            value: { access_token: access_token, refresh_token: refresh_token },
-            httponly: true,
-            secure: true
-          }
-        )
+        cookies.encrypted[:auth] = {
+          value: access_token,
+          httponly: true,
+          secure: true
+        }
+
         render json: { message: 'Logged in successfully', body: { user_id: user.id } }, status: :ok
       end
 
@@ -31,7 +30,7 @@ module Api
           refresh_token: cookies.encrypted[:jwt], decoded_token: @decoded_token, user: @current_user
         )
 
-        cookies.encrypted[:jwt] = {
+        cookies.encrypted[:auth] = {
           data: { access_token: access_token, refresh_token: refresh_token },
           httponly: true
         }

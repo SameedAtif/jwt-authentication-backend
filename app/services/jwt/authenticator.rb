@@ -5,12 +5,12 @@ module Jwt
     module_function
 
     def call(headers:, access_token:)
-      token = access_token || Jwt::Authenticator.authenticate_cookie(
-        headers
-      )
-      raise MissingToken unless token.present?
+      # token = access_token || Jwt::Authenticator.authenticate_cookie(
+      #   headers
+      # )
+      # raise MissingToken unless token.present?
 
-      decoded_token = Jwt::Decoder.decode!(token)
+      decoded_token = Jwt::Decoder.decode!(headers)
       user = Jwt::Authenticator.authenticate_user_from_token(decoded_token)
       raise Unauthorized unless user.present?
 
