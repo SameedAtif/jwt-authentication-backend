@@ -4,22 +4,12 @@ module Jwt
   module Authenticator
     module_function
 
-    def call(headers:, access_token:)
-      # token = access_token || Jwt::Authenticator.authenticate_cookie(
-      #   headers
-      # )
-      # raise MissingToken unless token.present?
-
+    def call(headers:)
       decoded_token = Jwt::Decoder.decode!(headers)
       user = Jwt::Authenticator.authenticate_user_from_token(decoded_token)
       raise Unauthorized unless user.present?
 
       [user, decoded_token]
-    end
-
-    def authenticate_cookie(cookies)
-      # cookie&.split('Bearer ')&.last
-      cookies.dig(:data, :access_token)
     end
 
     def authenticate_user_from_token(decoded_token)

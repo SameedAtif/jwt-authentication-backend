@@ -8,26 +8,26 @@ module Api
       def create
         user = User.find_by_email!(params[:email]).authenticate(params[:password])
         access_token, refresh_token = Jwt::Issuer.call(user)
-
         cookies.encrypted[:auth] = {
           value: access_token,
           httponly: true,
           secure: true
         }
+        body = { user_id: user.id, refresh_token: refresh_token }
 
-        render json: { message: 'Logged in successfully', body: { user_id: user.id } }, status: :ok
+        render json: { message: 'Logged in successfully', body:  body }, status: :ok
       end
 
       def destroy
         Jwt::Revoker.revoke(decoded_token: @decoded_token, user: @current_user)
-        cookies.delete(:jwt)
+        cookies.delete(:auth)
 
         render json: { message: 'Logged out successfully' }, status: :ok
       end
 
       def update
         access_token, refresh_token = Jwt::Refresher.refresh!(
-          refresh_token: cookies.encrypted[:jwt], decoded_token: @decoded_token, user: @current_user
+          refresh_token: cookies.encrypted[:auth], decoded_token: @decoded_token, user: @current_user
         )
 
         cookies.encrypted[:auth] = {
