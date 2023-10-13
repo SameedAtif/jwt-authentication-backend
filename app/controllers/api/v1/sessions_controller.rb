@@ -3,17 +3,18 @@
 module Api
   module V1
     class SessionsController < ApplicationController
-      skip_before_action :authenticate, only: %i[create]
+      skip_before_action :authenticate, only: %i[create update]
 
       def create
         user = User.find_by_email!(params[:email]).authenticate(params[:password])
         access_token, refresh_token = Jwt::Issuer.call(user)
         cookies.encrypted[:auth] = {
-          value: access_token,
+          value: "#{access_token}:#{refresh_token.crypted_token}",
           httponly: true,
-          secure: true
+          secure: Rails.env.production?
         }
-        body = { user_id: user.id, refresh_token: refresh_token }
+
+        body = { user_id: user.id }
 
         render json: { message: 'Logged in successfully', body:  body }, status: :ok
       end
@@ -26,13 +27,14 @@ module Api
       end
 
       def update
-        access_token, refresh_token = Jwt::Refresher.refresh!(
-          refresh_token: cookies.encrypted[:auth], decoded_token: @decoded_token, user: @current_user
+        access_token, refresh_token, user = Jwt::Refresher.refresh!(
+          refresh_token: cookies.encrypted[:auth]&.split(":")&.last, decoded_token: @decoded_token
         )
 
         cookies.encrypted[:auth] = {
-          data: { access_token: access_token, refresh_token: refresh_token },
-          httponly: true
+          value: "#{access_token}:#{refresh_token.crypted_token}",
+          httponly: true,
+          secure: Rails.env.production?
         }
 
         render json: { message: 'Token refreshed', body: { user_id: user.id } }, status: :ok

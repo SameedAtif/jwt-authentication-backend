@@ -5,7 +5,7 @@ module Jwt
     module_function
 
     def call(headers:)
-      decoded_token = Jwt::Decoder.decode!(headers)
+      decoded_token = Jwt::Decoder.decode(headers)
       user = Jwt::Authenticator.authenticate_user_from_token(decoded_token)
       raise Unauthorized unless user.present?
 
@@ -13,7 +13,7 @@ module Jwt
     end
 
     def authenticate_user_from_token(decoded_token)
-      raise InvalidToken unless decoded_token[:jti].present? && decoded_token[:user_id].present?
+      raise JWT::ExpiredSignature unless decoded_token.present? && decoded_token[:jti].present? && decoded_token[:user_id].present?
 
       user = User.find(decoded_token.fetch(:user_id))
       blacklisted = Jwt::Blacklister.blacklisted?(jti: decoded_token[:jti])

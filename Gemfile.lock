@@ -94,7 +94,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.12.4-x86_64-linux)
       racc (~> 1.4)
-    puma (5.5.0)
+    puma (5.1.1)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -161,7 +161,7 @@ DEPENDENCIES
   byebug
   jwt
   listen (~> 3.3)
-  puma (~> 5.0)
+  puma (~> 5.1.0)
   rack-cors
   rails (~> 6.1.4, >= 6.1.4.1)
   rbnacl
@@ -173,4 +173,4 @@ RUBY VERSION
    ruby 2.7.2p137
 
 BUNDLED WITH
-   2.2.26
+   2.3.8

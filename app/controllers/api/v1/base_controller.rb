@@ -12,7 +12,7 @@ module Api
       end
 
       def create
-        if new_resource.save
+        if new_resource.save!
           render json: new_resource, status: :ok
         else
           render json: { message: new_resource.errors.full_messages }, status: :unprocessable_entity

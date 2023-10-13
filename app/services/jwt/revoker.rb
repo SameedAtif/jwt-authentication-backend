@@ -15,7 +15,7 @@ module Jwt
         user: user
       )
     rescue StandardError
-      raise InvalidToken
+      raise JWT::ExpiredSignature
     end
   end
 end

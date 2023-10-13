@@ -6,7 +6,7 @@ module Jwt
 
     def decode!(access_token, verify: true)
       decoded = JWT.decode(access_token, Jwt::Secret.secret, verify, verify_iat: true)[0]
-      raise InvalidToken unless decoded.present?
+      raise JWT::ExpiredSignature unless decoded.present?
 
       decoded.symbolize_keys
     end

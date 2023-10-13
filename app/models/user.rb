@@ -7,6 +7,6 @@ class User < ApplicationRecord
   has_many :whitelisted_tokens, dependent: :delete_all
   has_many :blacklisted_tokens, dependent: :delete_all
 
-  validates :first_name, :last_name, :email, :password, presence: true
+  validates :first_name, :last_name, :email, presence: true
   validates :email, uniqueness: true
 end

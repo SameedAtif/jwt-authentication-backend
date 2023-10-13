@@ -26,14 +26,14 @@ environment ENV.fetch('RAILS_ENV', 'development')
 # Specifies the `pidfile` that Puma will use.
 pidfile ENV.fetch('PIDFILE', 'tmp/pids/server.pid')
 
-localhost_key = "#{File.join('config', 'ssh', 'localhost-key.pem')}"
-localhost_crt = "#{File.join('config', 'ssh', 'localhost.pem')}"
-# To be able to use rake etc
-ssl_bind '127.0.0.1', 4000, {
-  key: localhost_key,
-  cert: localhost_crt,
-  verify_mode: 'none'
-}
+# localhost_key = "#{File.join('config', 'ssh', 'localhost-key.pem')}"
+# localhost_crt = "#{File.join('config', 'ssh', 'localhost.pem')}"
+# # To be able to use rake etc
+# ssl_bind '127.0.0.1', 4000, {
+#   key: localhost_key,
+#   cert: localhost_crt,
+#   verify_mode: 'none'
+# }
 
 # Specifies the number of `workers` to boot in clustered mode.
 # Workers are forked web server processes. If using threads and workers together

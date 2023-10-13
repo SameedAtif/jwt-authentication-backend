@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2021_09_27_182056) do
 
   create_table "refresh_tokens", force: :cascade do |t|
     t.string "crypted_token"
+    t.datetime "expires_at"
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -36,6 +37,7 @@ ActiveRecord::Schema.define(version: 2021_09_27_182056) do
     t.string "last_name", null: false
     t.string "email", null: false
     t.string "password_digest"
+    t.datetime "token_issued_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_users_on_email", unique: true

@@ -13,3 +13,9 @@ Basic authentication using JWT, with emphasis on best practices.
 
 * `rails db:create db:migrate`
 * `rails s`
+
+## Known issues
+
+### Could not open library 'sodium'
+
+Possible fix: `brew install libsodium`
