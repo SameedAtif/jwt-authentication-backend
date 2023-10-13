@@ -1,20 +1,21 @@
 # frozen_string_literal: true
 
 module Jwt
-  module Decoder
-    module_function
+  class Decoder
+    class << self
 
-    def decode!(access_token, verify: true)
-      decoded = JWT.decode(access_token, Jwt::Secret.secret, verify, verify_iat: true)[0]
-      raise JWT::ExpiredSignature unless decoded.present?
+      def decode!(access_token, verify: true)
+        decoded = JWT.decode(access_token, Jwt::Secret.secret, verify, verify_iat: true)[0]
+        raise JWT::ExpiredSignature unless decoded.present?
 
-      decoded.symbolize_keys
-    end
+        decoded.symbolize_keys
+      end
 
-    def decode(access_token, verify: true)
-      decode!(access_token, verify: verify)
-    rescue StandardError
-      nil
+      def decode(access_token, verify: true)
+        decode!(access_token, verify: verify)
+      rescue StandardError
+        nil
+      end
     end
   end
 end
